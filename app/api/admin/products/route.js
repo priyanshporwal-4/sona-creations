@@ -10,12 +10,13 @@ export async function POST(req) {
     const product = await Product.create({
       name: body.name,
       slug: body.slug,
-      description: body.description,
+      description: body.description || "",
       price: body.price,
       category: body.category,
       sizes: body.sizes || [],
       images: body.images || [],
-      stock: body.stock || 0,
+      stock: body.stock ?? 0,
+      isActive: true, // 🔥 REQUIRED
     });
 
     return NextResponse.json(product, { status: 201 });

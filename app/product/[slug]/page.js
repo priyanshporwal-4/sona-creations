@@ -3,6 +3,7 @@ import AddToCartButton from "@/components/AddToCartButton";
 import connectDB from "@/lib/db";
 import Product from "@/models/Product";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,14 @@ export default async function ProductDetail(props) {
       <Navbar />
 
       <main className="max-w-5xl mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="bg-gray-100 rounded-xl h-96" />
+        <Image
+          src={product.images?.[0] || "/placeholder.png"}
+          alt={product.name}
+          width={500}
+          height={600}
+          className="rounded-xl object-cover w-full h-[500px]"
+          priority
+        />
 
         <div>
           <h1 className="text-3xl font-semibold mb-4">

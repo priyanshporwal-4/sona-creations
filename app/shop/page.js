@@ -1,5 +1,5 @@
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import ProductCard from "@/components/ProductCard";
 
 async function getProducts() {
   const res = await fetch("http://localhost:3000/api/products", {
@@ -25,23 +25,10 @@ export default async function ShopPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
           {products.map((product) => (
-            <Link
+            <ProductCard
               key={product._id}
-              href={`/product/${product.slug}`}
-              className="border rounded-xl p-6 hover:shadow-lg transition"
-            >
-              <h3 className="text-lg font-medium mb-2">
-                {product.name}
-              </h3>
-
-              <p className="text-sm text-gray-500 mb-4">
-                {product.category}
-              </p>
-
-              <p className="font-semibold text-lg">
-                ₹{product.price}
-              </p>
-            </Link>
+              product={product}
+            />
           ))}
         </div>
       </main>
