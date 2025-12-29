@@ -1,69 +1,46 @@
-import Navbar from "@/components/Navbar";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 
-const products = [
-  {
-    id: 1,
-    slug: "elegant-kurta-set",
-    name: "Elegant Kurta Set",
-    category: "Women Ethnic",
-    price: "₹2,499",
-  },
-  {
-    id: 2,
-    slug: "festive-anarkali",
-    name: "Festive Anarkali",
-    category: "Women Ethnic",
-    price: "₹3,199",
-  },
-  {
-    id: 3,
-    slug: "classic-cotton-kurta",
-    name: "Classic Cotton Kurta",
-    category: "Daily Wear",
-    price: "₹1,899",
-  },
-  {
-    id: 4,
-    slug: "designer-kurta-set",
-    name: "Designer Kurta Set",
-    category: "Occasion Wear",
-    price: "₹3,999",
-  },
-];
+async function getProducts() {
+  const res = await fetch("http://localhost:3000/api/products", {
+    cache: "no-store",
+  });
 
-export default function ShopPage() {
+  if (!res.ok) {
+    throw new Error("Failed to fetch products");
+  }
+
+  return res.json();
+}
+
+export default async function ShopPage() {
+  const products = await getProducts();
+
   return (
     <>
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-8 py-20">
-        <h1 className="text-4xl mb-12 text-center">
-          Shop Collection
-        </h1>
+        <h1 className="text-4xl mb-10">Shop</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
           {products.map((product) => (
             <Link
-              key={product.id}
+              key={product._id}
               href={`/product/${product.slug}`}
-              className="block"
+              className="border rounded-xl p-6 hover:shadow-lg transition"
             >
-              <div className="bg-white rounded-xl p-4 shadow-sm hover:shadow-xl transition cursor-pointer">
-                <div className="h-64 bg-gray-100 rounded-lg mb-4"></div>
+              <h3 className="text-lg font-medium mb-2">
+                {product.name}
+              </h3>
 
-                <h3 className="font-medium mb-1">
-                  {product.name}
-                </h3>
+              <p className="text-sm text-gray-500 mb-4">
+                {product.category}
+              </p>
 
-                <p className="text-sm text-gray-500 mb-2">
-                  {product.category}
-                </p>
-
-                <p className="font-semibold text-gold">
-                  {product.price}
-                </p>
-              </div>
+              <p className="font-semibold text-lg">
+                ₹{product.price}
+              </p>
             </Link>
           ))}
         </div>
