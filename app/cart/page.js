@@ -8,7 +8,7 @@ export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   const total = cartItems.reduce(
-    (sum, item) => sum + item.quantity * parseInt(item.price.replace("₹", "")),
+    (sum, item) => sum + item.quantity * item.price,
     0
   );
 

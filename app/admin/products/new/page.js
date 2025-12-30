@@ -3,28 +3,35 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function NewProductPage() {
+export default function AddProductPage() {
   const router = useRouter();
 
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     description: "",
     category: "",
     price: "",
     stock: "",
-    image: null,
+    images: [], // ✅ Cloudinary URLs
   });
 
   const [uploading, setUploading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
+  // -------------------------
+  // Handle text inputs
+  // -------------------------
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setForm({
-      ...form,
-      [name]: files ? files[0] : value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
+  // -------------------------
+  // Generate slug
+  // -------------------------
   const generateSlug = (name) =>
     name
       .toLowerCase()
@@ -32,33 +39,60 @@ export default function NewProductPage() {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
 
-  const uploadImage = async () => {
+  // -------------------------
+  // Upload image to Cloudinary
+  // -------------------------
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setImageUploading(true);
+
     const data = new FormData();
-    data.append("file", form.image);
+    data.append("file", file);
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: data,
-    });
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
 
-    const result = await res.json();
-    return result.url;
+      const result = await res.json();
+
+      if (!res.ok) {
+        alert(result.error || "Image upload failed");
+        setImageUploading(false);
+        return;
+      }
+
+      // ✅ Save Cloudinary URL
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, result.url],
+      }));
+    } catch (err) {
+      console.error(err);
+      alert("Image upload error");
+    }
+
+    setImageUploading(false);
   };
 
+  // -------------------------
+  // Submit product
+  // -------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
 
-    const imageUrl = await uploadImage();
-
     const payload = {
-      name: form.name,
-      description: form.description,
-      category: form.category,
-      price: Number(form.price),
-      stock: Number(form.stock),
-      slug: generateSlug(form.name),
-      images: [imageUrl],
+      name: formData.name,
+      description: formData.description,
+      category: formData.category,
+      price: Number(formData.price),
+      stock: Number(formData.stock),
+      slug: generateSlug(formData.name),
+      images: formData.images,
     };
 
     await fetch("/api/admin/products", {
@@ -120,21 +154,33 @@ export default function NewProductPage() {
           required
         />
 
+        {/* Image upload */}
         <input
-          name="image"
           type="file"
           accept="image/*"
-          className="w-full"
-          onChange={handleChange}
-          required
+          onChange={handleImageUpload}
         />
+
+        {/* Image preview */}
+        {formData.images.length > 0 && (
+          <div className="flex gap-4 mt-4">
+            {formData.images.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                alt="Uploaded"
+                className="w-24 h-24 object-cover rounded border"
+              />
+            ))}
+          </div>
+        )}
 
         <button
           type="submit"
-          disabled={uploading}
+          disabled={uploading || imageUploading}
           className="bg-gold text-white px-8 py-3 rounded-full"
         >
-          {uploading ? "Uploading..." : "Save Product"}
+          {uploading ? "Saving..." : "Save Product"}
         </button>
       </form>
     </div>

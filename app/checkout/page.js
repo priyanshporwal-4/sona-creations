@@ -1,4 +1,5 @@
 "use client";
+
 import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import { useCart } from "@/context/CartContext";
@@ -6,45 +7,46 @@ import { useCart } from "@/context/CartContext";
 export default function CheckoutPage() {
   const { cartItems } = useCart();
 
+  // ✅ Correct total calculation
   const total = cartItems.reduce(
-    (sum, item) =>
-      sum + item.quantity * Number(item.price.replace(/[^\d]/g, "")),
+    (sum, item) => sum + item.quantity * item.price,
     0
   );
 
   const handlePayment = async () => {
-  const res = await fetch("/api/razorpay", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: total }),
-  });
+    const res = await fetch("/api/razorpay", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: total }),
+    });
 
-  const order = await res.json();
+    const order = await res.json();
 
-  const options = {
-    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-    amount: order.amount,
-    currency: "INR",
-    name: "Sona Creations",
-    description: "Order Payment",
-    order_id: order.id,
-    handler: function (response) {
-      alert("Payment successful!");
-      console.log(response);
-    },
-    theme: {
-      color: "#C6A75E",
-    },
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: "INR",
+      name: "Sona Creations",
+      description: "Order Payment",
+      order_id: order.id,
+      handler: function (response) {
+        alert("Payment successful!");
+        console.log(response);
+      },
+      theme: {
+        color: "#C6A75E",
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
   };
-
-  const razorpay = new window.Razorpay(options);
-  razorpay.open();
-};
-
 
   return (
     <>
-    <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      {/* Razorpay Script */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-8 py-20 grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -105,9 +107,7 @@ export default function CheckoutPage() {
                   {item.name} × {item.quantity}
                 </span>
                 <span>
-                  ₹
-                  {item.quantity *
-                    Number(item.price.replace(/[^\d]/g, ""))}
+                  ₹{item.quantity * item.price}
                 </span>
               </div>
             ))}
@@ -121,10 +121,9 @@ export default function CheckoutPage() {
           <button
             onClick={handlePayment}
             className="w-full bg-gold text-white py-4 rounded-full shadow-md hover:opacity-90 transition"
-            >
+          >
             PAY ₹{total}
-            </button>
-
+          </button>
         </div>
       </main>
     </>
