@@ -2,67 +2,51 @@ import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema(
   {
-    orderId: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-
     items: [
       {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-        },
         name: String,
-        price: Number,
         quantity: Number,
-        size: String,
+        price: Number,
       },
     ],
+
+    total: {
+      type: Number,
+      required: true,
+    },
+    
+    status: {
+      type: String,
+      enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
+      default: "pending",
+    },
 
     customer: {
       name: String,
       email: String,
       phone: String,
-    },
 
-    address: {
-      addressLine: String,
-      city: String,
-      pincode: String,
-      state: String,
-    },
-
-    totalAmount: Number,
-
-    payment: {
-      method: String, // Razorpay / COD
-      razorpayOrderId: String,
-      razorpayPaymentId: String,
-      razorpaySignature: String,
-      status: {
-        type: String,
-        enum: ["PENDING", "PAID", "FAILED"],
-        default: "PENDING",
+      address: {
+        line1: String,
+        city: String,
+        state: String,
+        pincode: String,
+        country: { type: String, default: "India" },
       },
     },
 
-    shipment: {
-      shiprocketOrderId: String,
-      awb: String,
-      courier: String,
+    payment: {
+      razorpayOrderId: String,
+      razorpayPaymentId: String,
       status: String,
-    },
-
-    orderStatus: {
-      type: String,
-      enum: ["CREATED", "CONFIRMED", "SHIPPED", "DELIVERED", "CANCELLED"],
-      default: "CREATED",
     },
   },
   { timestamps: true }
 );
 
+/**
+ * 🚨 IMPORTANT
+ * This line prevents model caching bugs
+ */
 export default mongoose.models.Order ||
   mongoose.model("Order", OrderSchema);
