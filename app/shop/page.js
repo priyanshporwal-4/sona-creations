@@ -1,8 +1,10 @@
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
+import { getBaseUrl } from "@/lib/getBaseUrl";
+
 
 async function getProducts() {
-  const res = await fetch("/api/products", {
+  const res = await fetch(`${getBaseUrl()}/api/products`, {
     cache: "no-store",
   });
 
