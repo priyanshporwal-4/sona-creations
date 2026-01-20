@@ -43,17 +43,11 @@ export default async function ProductDetail(props) {
         />
 
         <div>
-          <h1 className="text-3xl font-semibold mb-4">
-            {product.name}
-          </h1>
+          <h1 className="text-3xl font-semibold mb-4">{product.name}</h1>
 
-          <p className="text-gray-600 mb-6">
-            {product.description}
-          </p>
+          <p className="text-gray-600 mb-6">{product.description}</p>
 
-          <p className="text-2xl font-bold mb-6">
-            ₹{product.price}
-          </p>
+          <p className="text-2xl font-bold mb-6">₹{product.price}</p>
 
           <AddToCartButton product={product} />
         </div>

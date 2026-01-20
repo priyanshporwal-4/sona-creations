@@ -35,7 +35,7 @@ export default function OrderStatus({ orderId, currentStatus }) {
         className="border rounded px-4 py-2 text-sm"
       >
         <option value="pending">Pending</option>
-        <option value="placed">Placed</option>
+        <option value="processing">Processing</option>
         <option value="shipped">Shipped</option>
         <option value="delivered">Delivered</option>
         <option value="cancelled">Cancelled</option>

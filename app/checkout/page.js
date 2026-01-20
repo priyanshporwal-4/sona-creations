@@ -16,7 +16,7 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
-  const [state, setState] = useState(""); 
+  const [state, setState] = useState("");
   const [pincode, setPincode] = useState("");
 
   const total = cartItems.reduce(
@@ -75,12 +75,12 @@ export default function CheckoutPage() {
 
         const result = await verifyRes.json();
 
-          if (result.success) {
-            router.push(`/order/success?orderId=${result.order._id}`);
-          } else {
-            alert("Payment verification failed");
-          }
-        },
+        if (result.success) {
+          router.push(`/order/success?orderId=${result.order._id}`);
+        } else {
+          alert("Payment verification failed");
+        }
+      },
 
       theme: {
         color: "#C6A75E",

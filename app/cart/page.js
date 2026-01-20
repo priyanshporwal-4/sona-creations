@@ -3,7 +3,6 @@ import Navbar from "@/components/Navbar";
 import { useCart } from "@/context/CartContext";
 import Link from "next/link";
 
-
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity } = useCart();
 
@@ -57,16 +56,13 @@ export default function CartPage() {
             </div>
 
             <div className="mt-10 flex justify-between items-center">
-              <h2 className="text-xl font-semibold">
-                Total: ₹{total}
-              </h2>
+              <h2 className="text-xl font-semibold">Total: ₹{total}</h2>
 
               <Link href="/checkout">
                 <button className="bg-gold text-white px-8 py-3 rounded-full shadow-md">
                   Proceed to Checkout
                 </button>
               </Link>
-
             </div>
           </>
         )}

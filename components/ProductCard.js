@@ -15,15 +15,9 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="p-4">
-          <h3 className="font-medium text-lg">
-            {product.name}
-          </h3>
-          <p className="text-sm text-gray-500">
-            {product.category}
-          </p>
-          <p className="font-semibold text-lg">
-            ₹{product.price}
-          </p>
+          <h3 className="font-medium text-lg">{product.name}</h3>
+          <p className="text-sm text-gray-500">{product.category}</p>
+          <p className="font-semibold text-lg">₹{product.price}</p>
         </div>
       </div>
     </Link>

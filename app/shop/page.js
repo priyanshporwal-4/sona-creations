@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 
 async function getProducts() {
-  const res = await fetch("http://localhost:3000/api/products", {
+  const res = await fetch("/api/products", {
     cache: "no-store",
   });
 
@@ -25,10 +25,7 @@ export default async function ShopPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
           {products.map((product) => (
-            <ProductCard
-              key={product._id}
-              product={product}
-            />
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </main>

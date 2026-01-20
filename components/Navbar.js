@@ -4,7 +4,6 @@ import Image from "next/image";
 export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between px-8 py-4 border-b border-gray-200 bg-ivory/80 backdrop-blur">
-
       {/* LOGO + BRAND */}
       <Link href="/" className="flex items-center gap-3">
         <Image
@@ -28,17 +27,11 @@ export default function Navbar() {
           </Link>
         </li>
 
-        <li className="hover:text-gold cursor-pointer">
-          New Arrivals
-        </li>
+        <li className="hover:text-gold cursor-pointer">New Arrivals</li>
 
-        <li className="hover:text-gold cursor-pointer">
-          About
-        </li>
+        <li className="hover:text-gold cursor-pointer">About</li>
 
-        <li className="hover:text-gold cursor-pointer">
-          Contact
-        </li>
+        <li className="hover:text-gold cursor-pointer">Contact</li>
       </ul>
 
       {/* ICONS */}

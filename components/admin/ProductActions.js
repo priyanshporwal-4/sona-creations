@@ -26,10 +26,7 @@ export default function ProductActions({ productId }) {
         Edit
       </Link>
 
-      <button
-        onClick={handleDelete}
-        className="text-red-600 hover:underline"
-      >
+      <button onClick={handleDelete} className="text-red-600 hover:underline">
         Delete
       </button>
     </div>

@@ -14,7 +14,7 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    
+
     status: {
       type: String,
       enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
@@ -48,5 +48,4 @@ const OrderSchema = new mongoose.Schema(
  * 🚨 IMPORTANT
  * This line prevents model caching bugs
  */
-export default mongoose.models.Order ||
-  mongoose.model("Order", OrderSchema);
+export default mongoose.models.Order || mongoose.model("Order", OrderSchema);

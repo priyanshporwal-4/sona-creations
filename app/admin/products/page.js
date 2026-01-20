@@ -8,9 +8,7 @@ export const revalidate = 0;
 export default async function AdminProductsPage() {
   await connectDB();
 
-  const products = await Product.find({})
-    .sort({ createdAt: -1 })
-    .lean();
+  const products = await Product.find({}).sort({ createdAt: -1 }).lean();
 
   return (
     <div>
@@ -45,9 +43,7 @@ export default async function AdminProductsPage() {
                 <td className="p-4">{p.category}</td>
                 <td className="p-4">₹{p.price}</td>
                 <td className="p-4">{p.stock}</td>
-                <td className="p-4">
-                  {p.isActive ? "Active" : "Inactive"}
-                </td>
+                <td className="p-4">{p.isActive ? "Active" : "Inactive"}</td>
                 <td className="p-4 space-x-3">
                   <Link
                     href={`/admin/products/edit/${p._id}`}

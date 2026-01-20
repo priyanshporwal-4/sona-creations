@@ -107,9 +107,7 @@ export default function AddProductPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-3xl font-semibold mb-6">
-        Add New Product
-      </h1>
+      <h1 className="text-3xl font-semibold mb-6">Add New Product</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
@@ -155,11 +153,7 @@ export default function AddProductPage() {
         />
 
         {/* Image upload */}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-        />
+        <input type="file" accept="image/*" onChange={handleImageUpload} />
 
         {/* Image preview */}
         {formData.images.length > 0 && (

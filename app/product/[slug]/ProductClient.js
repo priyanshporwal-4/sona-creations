@@ -15,13 +15,9 @@ export default function ProductClient({ product }) {
         <h1 className="text-4xl mb-4">{product.name}</h1>
         <p className="text-gray-500 mb-2">{product.category}</p>
 
-        <p className="text-2xl font-semibold text-gold mb-6">
-          {product.price}
-        </p>
+        <p className="text-2xl font-semibold text-gold mb-6">{product.price}</p>
 
-        <p className="text-gray-600 mb-8">
-          {product.description}
-        </p>
+        <p className="text-gray-600 mb-8">{product.description}</p>
 
         {/* SIZES */}
         <div className="mb-8">

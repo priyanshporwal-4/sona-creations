@@ -1,10 +1,9 @@
 import connectDB from "@/lib/db";
 import Order from "@/models/Order";
 import OrderStatus from "./OrderStatus";
-
+import CreateShipmentButton from "./CreateShipmentButton";
 
 export default async function AdminOrderDetailPage({ params }) {
-  // ✅ unwrap params (Next.js 15 fix)
   const { id } = await params;
 
   await connectDB();
@@ -12,14 +11,11 @@ export default async function AdminOrderDetailPage({ params }) {
   const order = await Order.findById(id).lean();
 
   if (!order) {
-    return (
-      <p className="text-red-600 font-medium">
-        Order not found
-      </p>
-    );
+    return <p className="text-red-600 font-medium">Order not found</p>;
   }
 
   const address = order.customer?.address;
+  const shipmentCreated = Boolean(order.shipment?.awb);
 
   return (
     <div className="max-w-4xl space-y-8">
@@ -30,16 +26,13 @@ export default async function AdminOrderDetailPage({ params }) {
 
       {/* CUSTOMER DETAILS */}
       <div className="bg-white p-6 rounded-xl shadow">
-        <h2 className="text-xl mb-4 font-medium">
-          Customer Details
-        </h2>
+        <h2 className="text-xl mb-4 font-medium">Customer Details</h2>
 
         <div className="space-y-2 text-sm">
           <p><b>Name:</b> {order.customer?.name}</p>
           <p><b>Email:</b> {order.customer?.email}</p>
           <p><b>Phone:</b> {order.customer?.phone}</p>
 
-          {/* ADDRESS */}
           <div className="pt-3">
             <p className="font-semibold mb-1">Shipping Address</p>
 
@@ -50,7 +43,8 @@ export default async function AdminOrderDetailPage({ params }) {
                 {order.customer.address?.line1},<br />
                 {order.customer.address?.city},{" "}
                 {order.customer.address?.state} -{" "}
-                {order.customer.address?.pincode}<br />
+                {order.customer.address?.pincode}
+                <br />
                 {order.customer.address?.country}
               </p>
             )}
@@ -93,9 +87,7 @@ export default async function AdminOrderDetailPage({ params }) {
 
       {/* PAYMENT */}
       <div className="bg-white p-6 rounded-xl shadow">
-        <h2 className="text-xl mb-4 font-medium">
-          Payment Details
-        </h2>
+        <h2 className="text-xl mb-4 font-medium">Payment Details</h2>
 
         <div className="space-y-2 text-sm">
           <p>
@@ -114,15 +106,48 @@ export default async function AdminOrderDetailPage({ params }) {
             <b>Payment ID:</b><br />
             {order.payment?.razorpayPaymentId}
           </p>
+
+          {/* 🔽 DOWNLOAD INVOICE (NEW) */}
+          {order.payment?.status === "paid" && (
+            <a
+              href={`/api/admin/orders/${order._id}/invoice`}
+              target="_blank"
+              className="inline-block mt-4 px-4 py-2 bg-gray-900 text-white text-sm rounded hover:bg-gray-800"
+            >
+              Download Invoice
+            </a>
+          )}
         </div>
       </div>
 
-      {/* ORDER STATUS */}
+      {/* ORDER STATUS + SHIPMENT */}
+      <div className="bg-white p-6 rounded-xl shadow space-y-4">
         <OrderStatus
-        orderId={order._id.toString()}
-        currentStatus={order.status}
+          orderId={order._id.toString()}
+          currentStatus={order.status}
         />
 
+        {shipmentCreated ? (
+          <div className="text-sm space-y-1">
+            <p><b>AWB:</b> {order.shipment.awb}</p>
+            <p><b>Courier:</b> {order.shipment.courier}</p>
+
+            {order.shipment.trackingUrl && (
+              <a
+                href={order.shipment.trackingUrl}
+                target="_blank"
+                className="inline-block mt-2 text-blue-600 hover:underline"
+              >
+                Track Shipment →
+              </a>
+            )}
+          </div>
+        ) : (
+          order.payment?.status === "paid" && (
+            <CreateShipmentButton orderId={order._id.toString()} />
+          )
+        )}
+      </div>
     </div>
   );
 }

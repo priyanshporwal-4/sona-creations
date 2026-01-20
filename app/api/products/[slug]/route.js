@@ -7,9 +7,7 @@ export async function GET(req, { params }) {
     await connectDB();
 
     // Normalize slug
-    const slug = decodeURIComponent(params.slug)
-      .trim()
-      .toLowerCase();
+    const slug = decodeURIComponent(params.slug).trim().toLowerCase();
 
     const product = await Product.findOne({
       slug: { $regex: `^${slug}$`, $options: "i" },
@@ -24,9 +22,6 @@ export async function GET(req, { params }) {
 
     return NextResponse.json(product);
   } catch (error) {
-    return NextResponse.json(
-      { error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -17,10 +17,7 @@ export default function DeleteButton({ productId }) {
   }
 
   return (
-    <button
-      onClick={handleDelete}
-      className="text-red-600 hover:underline"
-    >
+    <button onClick={handleDelete} className="text-red-600 hover:underline">
       Delete
     </button>
   );

@@ -92,9 +92,7 @@ export default function EditProductForm({ productId }) {
       <input
         type="number"
         value={form.price}
-        onChange={(e) =>
-          setForm({ ...form, price: Number(e.target.value) })
-        }
+        onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
         className="w-full border p-3 rounded"
         placeholder="Price"
         required
@@ -104,9 +102,7 @@ export default function EditProductForm({ productId }) {
       <input
         type="number"
         value={form.stock || 0}
-        onChange={(e) =>
-          setForm({ ...form, stock: Number(e.target.value) })
-        }
+        onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
         className="w-full border p-3 rounded"
         placeholder="Stock"
         required
@@ -119,10 +115,7 @@ export default function EditProductForm({ productId }) {
         <div className="flex gap-3 flex-wrap">
           {form.images?.map((img) => (
             <div key={img} className="relative">
-              <img
-                src={img}
-                className="w-24 h-24 object-cover rounded"
-              />
+              <img src={img} className="w-24 h-24 object-cover rounded" />
               <button
                 type="button"
                 onClick={() => removeImage(img)}
@@ -136,11 +129,7 @@ export default function EditProductForm({ productId }) {
       </div>
 
       {/* UPLOAD IMAGE */}
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-      />
+      <input type="file" accept="image/*" onChange={handleImageUpload} />
 
       {/* SAVE */}
       <button

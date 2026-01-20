@@ -10,12 +10,15 @@ export default async function AdminOrdersPage() {
     .sort({ createdAt: -1 })
     .lean();
 
+  // ✅ STATUS BADGE STYLES (EDIT IS HERE)
   const getStatusStyle = (status = "pending") => {
     switch (status) {
-      case "placed":
+      case "pending":
         return "bg-yellow-100 text-yellow-700";
-      case "shipped":
+      case "processing":
         return "bg-blue-100 text-blue-700";
+      case "shipped":
+        return "bg-purple-100 text-purple-700";
       case "delivered":
         return "bg-green-100 text-green-700";
       case "cancelled":
@@ -51,7 +54,6 @@ export default async function AdminOrdersPage() {
                   key={order._id.toString()}
                   className="border-t hover:bg-gray-50 transition"
                 >
-                  {/* ORDER ID */}
                   <td className="p-4 text-blue-600 font-medium">
                     <a
                       href={`/admin/orders/${order._id}`}
@@ -61,29 +63,21 @@ export default async function AdminOrdersPage() {
                     </a>
                   </td>
 
-                  {/* CUSTOMER */}
-                  <td className="p-4">
-                    {order.customer?.name || "—"}
-                  </td>
+                  <td className="p-4">{order.customer?.name || "—"}</td>
 
-                  {/* TOTAL */}
-                  <td className="p-4 font-medium">
-                    ₹{order.total || 0}
-                  </td>
+                  <td className="p-4 font-medium">₹{order.total || 0}</td>
 
-                  {/* PAYMENT */}
                   <td className="p-4">
                     <span className="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
                       Paid
                     </span>
                   </td>
 
-                  {/* DATE */}
                   <td className="p-4 text-gray-600">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </td>
 
-                  {/* STATUS */}
+                  {/* ✅ STATUS BADGE */}
                   <td className="p-4">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${getStatusStyle(
