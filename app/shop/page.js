@@ -4,11 +4,13 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 
 
 async function getProducts() {
-  const res = await fetch(`${getBaseUrl()}/api/products`, {
-    cache: "no-store",
-  });
+  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/api/products`;
+  console.log("FETCHING PRODUCTS FROM:", url);
+
+  const res = await fetch(url, { cache: "no-store" });
 
   if (!res.ok) {
+    console.error("PRODUCT FETCH FAILED:", res.status);
     throw new Error("Failed to fetch products");
   }
 
