@@ -3,16 +3,17 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // 🔧 Maintenance mode
+  // 🚧 GLOBAL MAINTENANCE MODE (EVERYONE)
   if (
     process.env.MAINTENANCE_MODE === "true" &&
     !pathname.startsWith("/maintenance") &&
-    !pathname.startsWith("/_next")
+    !pathname.startsWith("/_next") &&
+    !pathname.startsWith("/api")
   ) {
     return NextResponse.rewrite(new URL("/maintenance", request.url));
   }
 
-  // 🔐 Protect admin routes
+  // 🔐 ADMIN PROTECTION
   if (pathname.startsWith("/admin")) {
     const role = request.cookies.get("role")?.value;
 
@@ -24,7 +25,10 @@ export function middleware(request) {
   return NextResponse.next();
 }
 
-// Apply only to these paths
+/**
+ * 🔑 IMPORTANT:
+ * Run middleware on ALL routes
+ */
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
